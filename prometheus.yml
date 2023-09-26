@@ -1,0 +1,38 @@
+# My global configs
+global:
+  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  - 'prometheus.rules.yml'
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: "prometheus"
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    # Prometheus is running within its own container, so it can access its own services using localhost.
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Scrape configurations for monitoring sample targets with Node Exporter.
+  - job_name:       'node_exporter'
+
+    # Override the global default and scrape targets from this job every 5 seconds.
+    scrape_interval: 5s
+
+    # Port 9100 is the default port Node Exporter uses to expose metrics.
+    # Each Node Exporter container is running in its own separate network namespace.
+    static_configs:
+      - targets: ['172.17.0.6:9100', '172.17.0.7:9100']
+        labels:
+          group: 'production'
+
+      - targets: ['172.17.0.8:9100']
+        labels:
+          group: 'testing'
