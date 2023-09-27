@@ -21,7 +21,7 @@ scrape_configs:
     # In this context, localhost means "inside the Prometheus container."
     # Prometheus is running within its own container, so it can access its own services using localhost.
     static_configs:
-      - targets: ["localhost:9090"]
+      - targets: ["prometheus:9090"]
 
   # Scrape configurations for monitoring sample targets with Node Exporter.
   - job_name: 'node_exporter'
@@ -30,13 +30,9 @@ scrape_configs:
     scrape_interval: 5s
 
     # Port 9100 is the default port Node Exporter uses to expose metrics.
-    # Each Node Exporter container is running in its own separate network namespace.
-    # To access services running on the host or another container, you generally need to use the host's IP address.
+    # When each Node Exporter container is running in its own separate network namespace, use IP address.
+    # When running on the same network as other containers, their service names can be used.
     static_configs:
-      - targets: ['172.17.0.6:9100', '172.17.0.7:9100']
+      - targets: ['node_exporter_1:9100', 'node_exporter_2:9100', 'node_exporter_3:9100']
         labels:
           group: 'production'
-
-      - targets: ['172.17.0.8:9100']
-        labels:
-          group: 'testing'
