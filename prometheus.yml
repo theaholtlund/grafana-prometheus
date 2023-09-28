@@ -1,4 +1,4 @@
-# Configuration file for prometheus data source
+# Configuration file for Prometheus data source
 global:
   # Default scrape and evaluation interval is every minute.
   scrape_interval: 15s
@@ -8,8 +8,9 @@ global:
 rule_files:
   - 'prometheus.rules.yml'
 
-# Define endpoints to scrape, for collection and monitoring of metrics of targets.
 # Metrics_path defaults to '/metrics' and scheme defaults to 'http'.
+# When each container is running in its own separate network namespace, use IP address.
+# If containers are running on the same network, their service names can be used instead.
 scrape_configs:
   # Job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
   - job_name: "prometheus"
@@ -17,22 +18,30 @@ scrape_configs:
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
 
-    # Prometheus is running within its own container, so it can access its own services using localhost.
     # In this context, localhost means "inside the Prometheus container."
     # Prometheus is running within its own container, so it can access its own services using localhost.
     static_configs:
       - targets: ["prometheus:9090"]
 
-  # Scrape configurations for monitoring sample targets with Node Exporter.
-  - job_name: 'node_exporter'
+  # Scrape configurations for monitoring sample targets with Telegraf.  
+  - job_name: 'telegraf'
 
     # Override the global default and scrape targets from this job every 5 seconds.
     scrape_interval: 5s
+    
+    # Port 9273 is the default port Telegraf uses to expose metrics.
+    static_configs:
+      - targets: ['telegraf:9273']
+
+  # Scrape configurations for monitoring sample targets with Node Exporter.
+  - job_name: 'node_exporter'
 
     # Port 9100 is the default port Node Exporter uses to expose metrics.
-    # When each Node Exporter container is running in its own separate network namespace, use IP address.
-    # When running on the same network as other containers, their service names can be used.
     static_configs:
-      - targets: ['node_exporter_1:9100', 'node_exporter_2:9100', 'node_exporter_3:9100']
+      - targets: ['node_exporter_1:9100', 'node_exporter_2:9100']
         labels:
           group: 'production'
+
+      - targets: ['node_exporter_3:9100']
+        labels:
+          group: 'canary'
