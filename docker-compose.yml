@@ -59,6 +59,20 @@ services:
       - "8082:9100"
     networks:
       - monitoring_network
+  
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: sql_2019
+    environment:
+      SA_PASSWORD: ${SA_PASSWORD}
+      ACCEPT_EULA: Y
+      MSSQL_PID: Enterprise
+    networks:
+      - monitoring_network
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
 
 networks:
   monitoring_network:
@@ -67,3 +81,4 @@ networks:
 volumes:
   grafana_data:
   prometheus_data:
+  mssql_data:
