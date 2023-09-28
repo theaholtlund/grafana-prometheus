@@ -23,6 +23,17 @@ services:
       - prometheus_data:/prometheus
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
   
+  alertmanager:
+    image: prom/alertmanager
+    container_name: alert_manager
+    ports:
+      - "9093:9093"
+    networks:
+      - monitoring_network
+    volumes:
+      - ./alertmanager.yml:/etc/alertmanager/alertmanager.yml
+    command: --config.file=/etc/alertmanager/alertmanager.yml
+
   telegraf:
     image: telegraf:latest
     container_name: telegraf
