@@ -20,7 +20,18 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - ./prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
+      - prometheus_data:/prometheus
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
+  
+  telegraf:
+    image: telegraf:latest
+    container_name: telegraf
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+    ports:
+      - "9273:9273"
+    networks:
+      - monitoring_network
 
   node_exporter_1:
     image: prom/node-exporter
@@ -55,3 +66,4 @@ networks:
 
 volumes:
   grafana_data:
+  prometheus_data:
