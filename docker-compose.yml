@@ -73,6 +73,7 @@ services:
       - "1433:1433"
     volumes:
       - mssql_data:/var/opt/mssql
+      - ./sql-scripts:/scripts
 
 networks:
   monitoring_network:
