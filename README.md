@@ -1,7 +1,7 @@
-# Grafana and Prometheus Monitoring Application
+# Grafana Monitoring and Alerting Application
 
 ## Introduction
-This project provides a Docker-based monitoring solution using primarily Grafana, Prometheus, Node Exporter and MSSQL, allowing a user to monitor the health of devices, databases and other services. It was created as a way to learn how the technologies work and can be deployed through Docker, and is therefore relatively introductory and a work in progress.
+This project provides a Docker-based monitoring and alerting solution using primarily Prometheus, Grafana, Node Exporter and MSSQL, allowing a user to monitor the health of devices, databases and other services. It was created as a way to learn how the technologies work and can be deployed through Docker, and is therefore relatively introductory and a work in progress.
 
 ## Prerequisites
 - Docker

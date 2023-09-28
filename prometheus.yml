@@ -1,42 +1,42 @@
 # Configuration file for Prometheus data source
 global:
-  # Default scrape and evaluation interval is every minute.
+  # Default scrape and evaluation interval is every minute
   scrape_interval: 15s
   evaluation_interval: 15s
 
-# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'
 rule_files:
   - 'prometheus.rules.yml'
 
-# Metrics_path defaults to '/metrics' and scheme defaults to 'http'.
-# When each container is running in its own separate network namespace, use IP address.
-# If containers are running on the same network, their service names can be used instead.
+# Metrics_path defaults to '/metrics' and scheme defaults to 'http'
+# When each container is running in its own separate network namespace, use IP address
+# If containers are running on the same network, their service names can be used instead
 scrape_configs:
-  # Job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  # Job name is added as a label `job=<job_name>` to any timeseries scraped from this config
   - job_name: "prometheus"
 
-    # Override the global default and scrape targets from this job every 5 seconds.
+    # Override the global default and scrape targets from this job every 5 seconds
     scrape_interval: 5s
 
-    # In this context, localhost means "inside the Prometheus container."
-    # Prometheus is running within its own container, so it can access its own services using localhost.
+    # In this context, localhost means "inside the Prometheus container"
+    # Prometheus is running within its own container, so it can access its own services using localhost
     static_configs:
       - targets: ["prometheus:9090"]
 
-  # Scrape configurations for monitoring sample targets with Telegraf.  
+  # Scrape configurations for monitoring sample targets with Telegraf
   - job_name: 'telegraf'
 
-    # Override the global default and scrape targets from this job every 5 seconds.
+    # Override the global default and scrape targets from this job every 5 seconds
     scrape_interval: 5s
     
-    # Port 9273 is the default port Telegraf uses to expose metrics.
+    # Port 9273 is the default port Telegraf uses to expose metrics
     static_configs:
       - targets: ['telegraf:9273']
 
-  # Scrape configurations for monitoring sample targets with Node Exporter.
+  # Scrape configurations for monitoring sample targets with Node Exporter
   - job_name: 'node_exporter'
 
-    # Port 9100 is the default port Node Exporter uses to expose metrics.
+    # Port 9100 is the default port Node Exporter uses to expose metrics
     static_configs:
       - targets: ['node_exporter_1:9100', 'node_exporter_2:9100']
         labels:
@@ -45,3 +45,9 @@ scrape_configs:
       - targets: ['node_exporter_3:9100']
         labels:
           group: 'canary'
+
+# Set up alerting for the application
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
