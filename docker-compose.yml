@@ -27,7 +27,7 @@ services:
     image: telegraf:latest
     container_name: telegraf
     volumes:
-      - ./telegraf.conf:/etc/telegraf/telegraf.conf
+      - ./config/telegraf.conf:/etc/telegraf/telegraf.conf
     ports:
       - "9273:9273"
     networks:
