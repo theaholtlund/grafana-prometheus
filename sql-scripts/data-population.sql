@@ -1,0 +1,12 @@
+INSERT INTO Inventory VALUES (1, 'banana', 150);
+INSERT INTO Inventory VALUES (2, 'orange', 154);
+INSERT INTO Inventory VALUES (3, 'apple', 10);
+INSERT INTO Inventory VALUES (4, 'bike', 17);
+INSERT INTO Inventory VALUES (5, 'chair', 12);
+INSERT INTO Inventory VALUES (6, 'table', 4);
+INSERT INTO Inventory VALUES (7, 'desk', 120);
+INSERT INTO Inventory VALUES (8, 'book', 142);
+INSERT INTO Inventory VALUES (9, 'glass', 100);
+INSERT INTO Inventory VALUES (10, 'jacket', 120);
+INSERT INTO Inventory VALUES (11, 'bread', 8);
+INSERT INTO Inventory VALUES (12, 'butter', 12);
