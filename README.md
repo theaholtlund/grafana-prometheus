@@ -14,6 +14,8 @@ To set up and run the application, follow these steps:
 
 2. Navigate to the project directory.
 
+3. Add environment variables for SMTP credentials, such as the username and password, to the alertmanager.yml file.
+
 3. Start the Docker monitoring stack:
    ```bash
    docker-compose up -d
