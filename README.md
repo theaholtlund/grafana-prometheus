@@ -14,9 +14,9 @@ To set up and run the application, follow these steps:
 
 2. Navigate to the project directory.
 
-3. Add environment variables for SMTP credentials, such as the username and password, to the alertmanager.yml file.
+3. Add environment variables for SMTP credentials, such as the username and password, to the alertmanager.yml file. This must be fone manually because Prometheus currently does not support environment variables or configuration substitution. 
 
-3. Start the Docker monitoring stack:
+3. Start the stack using Docker Compose:
    ```bash
    docker-compose up -d
 

@@ -7,13 +7,13 @@ route:
   repeat_interval: 3h
   group_by: ['alertname', 'job', 'instance', 'severity']
 
-# Environment variables must be added to the file before execution
-# Prometheus currently does not support referencing variables from the .env file
+# Variables must be added to the file before execution
+# Prometheus currently does not support referencing environment variables
 receivers:
   - name: 'default-receiver'
     email_configs:
       - to: RECIPIENT_EMAIL
         from: SENDER_EMAIL
-        smarthost: sandbox.smtp.mailtrap.io:587
+        smarthost: SMARTHOST
         auth_username: AUTH_USERNAME
         auth_password: AUTH_PASSWORD
