@@ -72,12 +72,12 @@ services:
       - monitoring_network
   
   mssql:
-    image: mcr.microsoft.com/mssql/server:2019-latest
+    image: mcr.microsoft.com/mssql/server
     container_name: sql_2019
     environment:
-      SA_PASSWORD: ${SA_PASSWORD}
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
       ACCEPT_EULA: Y
-      MSSQL_PID: Enterprise
+      MSSQL_PID: Evaluation
     networks:
       - monitoring_network
     ports:
@@ -85,6 +85,16 @@ services:
     volumes:
       - mssql_data:/var/opt/mssql
       - ./sql-scripts:/scripts
+
+  mssql_exporter:
+    image: awaragi/prometheus-mssql-exporter
+    container_name: mssql_exporter
+    ports:
+      - "4000:4000"
+    environment:
+      USERNAME: ${SQL_USERNAME}
+      PASSWORD: ${SQL_PASSWORD}
+      SERVER: ${SQL_SERVER_NUMBER}
 
 networks:
   monitoring_network:
