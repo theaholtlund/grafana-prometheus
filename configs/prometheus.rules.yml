@@ -70,7 +70,7 @@ groups:
   - name: combined-cpu-usage-alert
     rules:
       # Custom alert for when the combined percentage CPU usage of Node Exporter and Telegraf exceeds threashold
-      - alert: high_cpu_load_combined
+      - alert: high_cpu_load
         expr: combined_cpu_usage_percentage > 80
         for: 2m
         labels:
