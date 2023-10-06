@@ -1,0 +1,54 @@
+# Configuration file for Prometheus
+
+# Global defaults for scrape and evaluation intervals
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+# Load rules and periodically evaluate them according to global evaluation interval
+rule_files:
+  - 'prometheus.rules.yml'
+
+# When each container is running in its own separate network namespace, use IP address
+# If containers are running on the same network, their service names can be used instead
+scrape_configs:
+  # Scrape configurations for monitoring target metrics from Prometheus
+  # Prometheus is running within its own container, and can therefore scrape its own metrics
+  - job_name: "prometheus"
+    scrape_interval: 5s
+    static_configs:
+      - targets: ["prometheus:9090"]
+    
+  # Scrape configurations for monitoring target metrics from MSSQL Exporter
+  # The special DNS name host.docker.internal resolves to the internal IP address used by the host
+  - job_name: 'mssql_exporter'
+    static_configs:
+      - targets: ['host.docker.internal:4000']
+
+  # Scrape configurations for monitoring target metrics from Telegraf
+  - job_name: 'telegraf'
+    static_configs:
+      - targets: ['telegraf:9273']
+
+  # Scrape configurations for monitoring target metrics from Node Exporter
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['node_exporter_1:9100', 'node_exporter_2:9100']
+        labels:
+          group: 'production'
+
+      - targets: ['node_exporter_3:9100']
+        labels:
+          group: 'canary'
+
+  # Scrape configurations for monitoring target metrics from Windows Exporter
+  - job_name: 'windows-exporter'
+    scrape_interval: 30s
+    static_configs:
+      - targets: ['XX.XXX.X.XXX:9182']
+
+# Configure how Prometheus interacts with Alertmanager for alert forwarding
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ['alertmanager:9093']
