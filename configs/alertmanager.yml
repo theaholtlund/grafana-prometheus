@@ -1,6 +1,6 @@
 # Configuration file for Prometheus Alertmanager
 
-# The default route will receive alerts that do not match any other routes
+# Top-level configuration, defines default routing for alerts unless overridden by specific routes
 route:
   receiver: 'default-receiver'
   group_wait: 30s
@@ -8,11 +8,11 @@ route:
   repeat_interval: 3h
   group_by: ['alertname', 'job', 'instance', 'severity']
 
-# Define route for custom alerts to use the custom-alerts-receiver
-route:
-  receiver: 'custom-alerts-receiver'
-  match:
-    alertname: 'custom_alert', 'high_windows_cpu_load', 'cpu-usage-alert', 'combined-cpu-usage-alert'
+  routes:
+    # Define route for custom alerts to use the custom-alerts-receiver
+    - receiver: 'custom-alerts-receiver'
+      match_re:
+        alertname: high_windows_cpu_load|high_cpu_load
 
 # Sender and receiver variables must be added to the file before execution
 # Prometheus currently does not support referencing environment variables
@@ -36,8 +36,6 @@ receivers:
 # Inhibition rules allow for muting or grouping specific alerts, managing alert dependencies
 # Here it is used to suppress warning alerts when a critical alert with the same alertname occurs
 inhibit_rules:
-  - source_match:
-      severity: 'warning'
-    target_match:
-      severity: 'critical'
-    equal: 'high_cpu_load_combined'
+  - source_matchers: [severity='critical']
+    target_matchers: [severity='warning']
+    equal: [alertname]
