@@ -12,7 +12,7 @@ route:
     # Define route for custom alerts to use the custom-alerts-receiver
     - receiver: 'custom-alerts-receiver'
       match_re:
-        alertname: high_windows_cpu_load|high_cpu_load
+        alertname: high_windows_cpu_load_user_mode|high_cpu_load
 
 # Sender and receiver variables must be added to the file before execution
 # Prometheus currently does not support referencing environment variables
