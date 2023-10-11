@@ -16,8 +16,9 @@ scrape_configs:
   # Prometheus is running within its own container, and can therefore scrape its own metrics
   - job_name: "prometheus"
     scrape_interval: 5s
+    metrics_path: /metrics/
     static_configs:
-      - targets: ["prometheus:9090"]
+      - targets: ['prometheus:9090', 'engine:8080']
     
   # Scrape configurations for monitoring target metrics from MSSQL Exporter
   # The special DNS name host.docker.internal resolves to the internal IP address used by the host
@@ -42,7 +43,7 @@ scrape_configs:
           group: 'canary'
 
   # Scrape configurations for monitoring target metrics from Windows Exporter
-  - job_name: 'windows-exporter'
+  - job_name: 'windows_exporter'
     scrape_interval: 30s
     static_configs:
       - targets: ['XX.XXX.X.XXX:9182']
