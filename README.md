@@ -14,9 +14,11 @@ To set up and run the application, follow these steps:
 
 2. Navigate to the project directory.
 
-3. Add environment variables referenced in the `docker-compose.yml` file to a project `.env` file. However, it is important to note that SMTP credentials used by Alertmanager, such as usernames and passwords, must be added directly to the `alertmanager.yml` file. This is because Prometheus currently does not support the use of environment variables or configuration substitution. 
+3. Add environment variables referenced in the `docker-compose.yml` file to a project `.env` file. However, it is important to note that SMTP credentials used by Alertmanager, such as usernames and passwords, must be added directly to the `alertmanager.yml` file in the `configs` folder. This is because Prometheus currently does not support the use of environment variables or config substitution. 
 
-4. Start the stack using Docker Compose:
+4. Add an `nginx.conf` file to the `configs` folder, if you want to use proxying. The `docker-compose.yml` file will create an Nginx container, but configs must be added manually as the Nginx config does not support environment variables out of the box.
+
+5. Start the stack using Docker Compose:
    ```bash
    docker-compose up -d
 
@@ -25,6 +27,7 @@ To set up and run the application, follow these steps:
 - **Grafana OnCall**: Serves as the core component for the monitoring and alerting functionality, offering incident management, escalation policies and on-call scheduling. Configured in the Grafana web-based UI.
 - **Celery**: Handles asynchronous and distributed task processing and queue management. Can be implemented for parallel execution and scheduled tasks.
 - **Redis**: An in-memory key-value store and the message broker for Celery, acting as a communication channel between different parts of the application by facilitate communication and task distribution. Commonly used for internal communication between containers.
+- **Nginx**: Can be used as a web server, reverse proxy and load balancer, to facilitate caching, serve web pages, applications and balance incoming web traffic to multiple servers.
 - **Prometheus**: Monitor defined targets, to check on their health and performance. Collects system-level metrics like CPU usage, memory consumption and disk space. Also has alerting functionality through **Alertmanager**, which is specifically created to handle routing, grouping and notifications of Prometheus metric alerts.
 - **Telegraf**: Non-specific, platform-agnostic exporter, used for collecting metrics from a wide range of sources. Can collect metrics from Windows, Linux, macOS and other platforms, as well as services, databases and more.
 - **Node Exporter**: Specialised exporter focused Unix-based systems, and part of the Prometheus ecosystem. In this project, it is used to gather system-level metrics from containers running on the OS, which in this case is macOS.
