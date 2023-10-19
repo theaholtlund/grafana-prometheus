@@ -83,6 +83,16 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
+  
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./configs/nginx.conf:/etc/nginx/nginx.conf
+    networks:
+      - monitoring_network
       
   prometheus:
     image: prom/prometheus:latest
