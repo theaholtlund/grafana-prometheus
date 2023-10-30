@@ -156,7 +156,7 @@ services:
     networks:
       - monitoring_network
   
-  mssql:
+  mssql_server:
     image: mcr.microsoft.com/mssql/server
     container_name: sql_2019
     environment:
@@ -182,7 +182,7 @@ services:
       SERVER: ${SQL_SERVER_NUMBER}
 
 # Bridge is one of the built-in network drivers from Docker
-# Bridge networks are private internal networks isolated from the host network and other bridge networks
+# Private internal networks isolated from the host network and other bridge networks
 networks:
   monitoring_network:
     driver: bridge

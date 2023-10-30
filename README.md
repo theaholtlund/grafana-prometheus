@@ -31,7 +31,7 @@ To set up and run the application, follow these steps:
 - **Prometheus**: Monitor defined targets, to check on their health and performance. Collects system-level metrics like CPU usage, memory consumption and disk space. Also has alerting functionality through **Alertmanager**, which is specifically created to handle routing, grouping and notifications of Prometheus metric alerts.
 - **Telegraf**: Non-specific, platform-agnostic exporter, used for collecting metrics from a wide range of sources. Can collect metrics from Windows, Linux, macOS and other platforms, as well as services, databases and more.
 - **Node Exporter**: Specialised exporter focused Unix-based systems, and part of the Prometheus ecosystem. In this project, it is used to gather system-level metrics from containers running on the OS, which in this case is macOS.
-- **MSSQL**: Create a containerised Microsoft SQL Server instance, and configure it with some specified environment variables. Allow for testing of an environment where the SQL Server database is running in a container.
+- **MSSQL Server**: Create a containerised Microsoft SQL Server environment on Linux for Docker Engine. It is here used to create an instance of the MSSQL Server program, a relational database management system, later used for creating testing databases.
 - **MSSQL Exporter**: Exporter used to collect metrics from a Microsoft SQL Server instance, enabling monitoring of SQL Server-specific performance metrics and database health.
 - **Windows Exporter**: Specialised exporter for Windows-based systems, and only configured in the `prometheus.yml` file for this project, as it is hosted from a macOS and therefore scrapes metrics from a Windows VM where it is running.
 
