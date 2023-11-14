@@ -1,0 +1,3 @@
+# HELP my_batch_job_completion_time Completion time of a batch job, in unixtime.
+# TYPE my_batch_job_completion_time gauge
+my_batch_job_completion_time 1699948758
