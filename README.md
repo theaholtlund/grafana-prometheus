@@ -22,6 +22,10 @@ To set up and run the application, follow these steps:
    ```bash
    docker-compose up -d
 
+6. The first Node Exporter container, `node_exporter_1`, has functionality for textfilt metrics. Enable a (hypothetical, as this is for testing as of now) continuous gathering of defined metrics by running the `update-metrics.sh` script inside the container:
+   ```bash
+   docker exec -it node_exporter_1 /bin/sh -c "chmod +x ./update-metrics.sh"
+
 ## Project Component Stack
 - **Grafana**: Create data visualisations, primarily aimed at observability and analytics. Can be configured for a variety of data sources, and is particularly powerful when creating dashboards and time-series data visualisations. Can also be used for altering through **Grafana Alerting**, combined with incident response management through **Grafana OnCall**, which is configured in the web-based UI.
 - **Grafana OnCall**: Serves as the core component for the monitoring and alerting functionality, offering incident management, escalation policies and on-call scheduling. Configured in the Grafana web-based UI.
