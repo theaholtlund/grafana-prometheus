@@ -138,6 +138,7 @@ services:
       - monitoring_network
     volumes:
       - ./textfile-metrics:/textfile-metrics
+      - ./update-metrics.sh:/update-metrics.sh
     command: ["--web.listen-address=:9100", "--collector.textfile.directory=textfile-metrics"]
 
   node_exporter_2:
@@ -147,9 +148,7 @@ services:
       - "8082:9100"
     networks:
       - monitoring_network
-    volumes:
-      - ./textfile-metrics:/textfile-metrics
-    command: ["--web.listen-address=:9100", "--collector.textfile.directory=textfile-metrics"]
+    command: ["--web.listen-address=:9100"]
 
   node_exporter_3:
     image: prom/node-exporter
@@ -158,9 +157,7 @@ services:
       - "8083:9100"
     networks:
       - monitoring_network
-    volumes:
-      - ./textfile-metrics:/textfile-metrics
-    command: ["--web.listen-address=:9100", "--collector.textfile.directory=textfile-metrics"]
+    command: ["--web.listen-address=:9100"]
   
   mssql_server:
     image: mcr.microsoft.com/mssql/server
