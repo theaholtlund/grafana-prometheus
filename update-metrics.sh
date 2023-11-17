@@ -1,4 +1,5 @@
 # Script to initiate inside Node Exporter #1 container
+# Potentially look into automating through Go WriteToTextfile funtion or GitHub example scripts
 #!/bin/sh
 
 while true; do
