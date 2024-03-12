@@ -84,7 +84,7 @@ services:
       timeout: 5s
       interval: 5s
       retries: 10
-  
+
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -94,7 +94,7 @@ services:
       - ./configs/nginx.conf:/etc/nginx/nginx.conf
     networks:
       - monitoring_network
-      
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -107,7 +107,7 @@ services:
       - ./configs/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
       - prometheus_data:/prometheus
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
-  
+
   alertmanager:
     image: prom/alertmanager
     container_name: alertmanager
@@ -139,7 +139,11 @@ services:
     volumes:
       - ./textfile-metrics:/textfile-metrics
       - ./update-metrics.sh:/update-metrics.sh
-    command: ["--web.listen-address=:9100", "--collector.textfile.directory=textfile-metrics"]
+    command:
+      [
+        "--web.listen-address=:9100",
+        "--collector.textfile.directory=textfile-metrics",
+      ]
 
   node_exporter_2:
     image: prom/node-exporter
@@ -158,7 +162,7 @@ services:
     networks:
       - monitoring_network
     command: ["--web.listen-address=:9100"]
-  
+
   mssql_server:
     image: mcr.microsoft.com/mssql/server
     container_name: sql_2019
@@ -173,6 +177,19 @@ services:
     volumes:
       - mssql_data:/var/opt/mssql
       - ./sql-scripts:/scripts
+
+  sql_exporter:
+    image: burningalchemist/sql_exporter
+    container_name: sql_exporter
+    ports:
+      - "9399:9399"
+    environment:
+      CONFIG_FILE: /path/to/your/config.yml
+    volumes:
+      - ./configs/sql-exporter.yml:/etc/sql-exporter/sql-exporter.yml
+    networks:
+      - monitoring_network
+    command: --config.file=/etc/sql-exporter/sql-exporter.yml
 
   mssql_exporter:
     image: awaragi/prometheus-mssql-exporter
