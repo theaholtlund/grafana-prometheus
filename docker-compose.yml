@@ -184,6 +184,7 @@ services:
     ports:
       - "9399:9399"
     environment:
+      DATABASENAME: ${DATABASENAME}
       MSSQL_SA_USER: ${SA_USER}
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     volumes:
