@@ -1,15 +1,32 @@
 # This collector will be referenced in the exporter configuration as `ha_availability`.
 collector_name: mssql-availability
 
-# A Prometheus metric to indicate whether High Availability (e.g., Always On) is enabled.
+# Individual metrics to be retrieved by the collector
 metrics:
+  # Prometheus metric to indicate whether any database exists.
+  - metric_name: mssql-database-exists
+    type: gauge
+    help: "Indicates whether any database exists."
+    static_value: 1
+    query: |
+      IF EXISTS (SELECT * FROM sys.databases)
+      BEGIN
+          SELECT 1 AS DatabaseExists;
+      END
+      ELSE
+      BEGIN
+          SELECT 0 AS DatabaseExists;
+      END
+
+  # Prometheus metric to indicate whether High Availability (e.g., Always On) is enabled.
   - metric_name: mssql-ha-enabled
     type: gauge
-    help: "Indicates whether High Availability (e.g., Always On) is enabled for each database."
+    help: "Indicates whether High Availability (e.g., Always On) is enabled for the specified database."
     key_labels:
-      - DatabaseName # Label to identify the database name
-    # Query to check if High Availability is enabled for each database
+      - DatabaseName
+    values: [ha-enabled]
     query: |
-      SELECT name AS DatabaseName, 
+      SELECT name AS DatabaseName,
              CASE WHEN is_hadr_enabled = 1 THEN 1 ELSE 0 END AS HaEnabled
-      FROM sys.databases;
+      FROM sys.databases
+      WHERE name = '${DATABASENAME}';
