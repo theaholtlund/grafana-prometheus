@@ -187,10 +187,11 @@ services:
       MSSQL_SA_USER: ${SA_USER}
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     volumes:
-      - ./configs/sql-exporter.yml:/etc/sql-exporter/sql-exporter.yml
+      - ./custom-collectors/sql-exporter/sql-exporter.yml:/etc/custom-collectors/sql-exporter/sql-exporter.yml
+      - ./custom-collectors/sql-exporter/mssql-availability.collector.yml:/custom-collectors/sql-exporter/mssql-availability.collector.yml
     networks:
       - monitoring_network
-    command: --config.file=/etc/sql-exporter/sql-exporter.yml
+    command: --config.file=/etc/sql-exporter.yml
 
   mssql_exporter:
     image: awaragi/prometheus-mssql-exporter
