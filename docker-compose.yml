@@ -138,7 +138,7 @@ services:
       - monitoring_network
     volumes:
       - ./textfile-metrics:/textfile-metrics
-      - ./update-metrics.sh:/update-metrics.sh
+      - ./custom-collectors/update-metrics.sh:/custom-collectors/update-metrics.sh
     command:
       [
         "--web.listen-address=:9100",
