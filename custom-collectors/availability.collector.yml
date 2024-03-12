@@ -1,5 +1,5 @@
 # This collector will be referenced in the exporter configuration as `ha_availability`.
-collector_name: ha_availability
+collector_name: availability
 
 # A Prometheus metric to indicate whether High Availability (e.g., Always On) is enabled.
 metrics:
