@@ -24,7 +24,7 @@ target:
 
   # Collectors (referenced by name) to execute on the target.
   # Glob patterns are supported (see <https://pkg.go.dev/path/filepath#Match> for syntax).
-  collectors: [availability]
+  collectors: [mssql-*]
 
   # In case you need to connect to a backend that only responds to a limited set of commands (e.g. pgbouncer) or
   # a data warehouse you don't want to keep online all the time (due to the extra cost), you might want to disable `ping`
@@ -33,4 +33,4 @@ target:
 # Collector definition files.
 # Glob patterns are supported (see <https://pkg.go.dev/path/filepath#Match> for syntax).
 collector_files:
-  - "../custom-collectors/availability.collector.yml"
+  - "*.collector.yml"

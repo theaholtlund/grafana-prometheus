@@ -1,9 +1,9 @@
 # This collector will be referenced in the exporter configuration as `ha_availability`.
-collector_name: availability
+collector_name: mssql-availability
 
 # A Prometheus metric to indicate whether High Availability (e.g., Always On) is enabled.
 metrics:
-  - metric_name: ha_enabled
+  - metric_name: mssql-ha-enabled
     type: gauge
     help: "Indicates whether High Availability (e.g., Always On) is enabled for each database."
     key_labels:
