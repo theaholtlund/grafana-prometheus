@@ -184,7 +184,7 @@ services:
     ports:
       - "9399:9399"
     environment:
-      CONFIG_FILE: /path/to/your/config.yml
+      MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     volumes:
       - ./configs/sql-exporter.yml:/etc/sql-exporter/sql-exporter.yml
     networks:
