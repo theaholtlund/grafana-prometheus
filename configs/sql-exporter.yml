@@ -34,3 +34,7 @@ target:
 # Glob patterns are supported (see <https://pkg.go.dev/path/filepath#Match> for syntax).
 collector_files:
   - "*.collector.yml"
+# Collector definition files.
+# Glob patterns are supported (see <https://pkg.go.dev/path/filepath#Match> for syntax).
+collector_files:
+  - "../custom-collectors/availability.collector.yml"
