@@ -1,0 +1,15 @@
+# This collector will be referenced in the exporter configuration as `ha_availability`.
+collector_name: ha_availability
+
+# A Prometheus metric to indicate whether High Availability (e.g., Always On) is enabled.
+metrics:
+  - metric_name: ha_enabled
+    type: gauge
+    help: "Indicates whether High Availability (e.g., Always On) is enabled for each database."
+    key_labels:
+      - DatabaseName # Label to identify the database name
+    # Query to check if High Availability is enabled for each database
+    query: |
+      SELECT name AS DatabaseName, 
+             CASE WHEN is_hadr_enabled = 1 THEN 1 ELSE 0 END AS HaEnabled
+      FROM sys.databases;
