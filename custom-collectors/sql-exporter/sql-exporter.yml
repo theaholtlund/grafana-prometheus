@@ -17,10 +17,10 @@ global:
 target:
   # Target name (optional). Setting this field enables extra metrics e.g. `up` and `scrape_duration` with
   # the `target` label that are always returned on a scrape.
-  name: mssql_database # Dynamic target name based on DatabaseName from the collector
+  name: sql_2019 # Dynamic target name based on DatabaseName from the collector
   # Data source name always has a URI schema that matches the driver name. In some cases (e.g. MySQL)
   # the schema gets dropped or replaced to match the driver expected DSN format.
-  data_source_name: "sqlserver://${MSSQL_SA_USER}:${MSSQL_SA_PASSWORD}@localhost:1433"
+  data_source_name: "sqlserver://${MSSQL_SA_USER}:${MSSQL_SA_PASSWORD}@mssql_server:1433"
 
   # Collectors (referenced by name) to execute on the target.
   # Glob patterns are supported (see <https://pkg.go.dev/path/filepath#Match> for syntax).
