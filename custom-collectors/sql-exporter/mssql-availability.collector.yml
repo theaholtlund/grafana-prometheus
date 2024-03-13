@@ -3,22 +3,56 @@ collector_name: mssql-availability
 
 # Individual metrics to be retrieved by the collector
 metrics:
+  # Prometheus metric to indicate the local time in seconds since epoch (Unix time).
+  - metric_name: mssql_local_time_seconds
+    type: gauge
+    help: "Local time in seconds since epoch, Unix time"
+    values: [unix_time]
+    query: |
+      SELECT DATEDIFF(second, '19700101', GETUTCDATE()) AS unix_time
+
   # Prometheus metric to indicate whether any database exists
-  # Static value parameter to set value if query does not return anything
   - metric_name: mssql_database_exists
     type: gauge
-    help: "Indicates whether any database exists."
-    static_value: 1
+    help: "Indicates whether any database exists"
+    values: [mssql_database_exists]
     query: |
       IF EXISTS (SELECT name FROM sys.databases)
-      SELECT 1
-        ELSE
-      SELECT 0
+        SELECT 1 AS mssql_database_exists
+      ELSE
+        SELECT 0 AS mssql_database_exists
 
   # Prometheus metric to indicate the total number of items in the Inventory table
   - metric_name: total_inventory_items
     type: gauge
-    help: "Total number of items in the Inventory table."
+    help: "Total number of items in the Inventory table"
+    values: [total_inventory_items]
     query: |
-      USE InventoryDB;
-      SELECT COUNT(*) AS total_inventory_items FROM Inventory
+      SELECT COUNT(*) AS total_inventory_items FROM InventoryDB.dbo.Inventory
+
+  # Prometheus metric to indicate the number of active connections per database
+  - metric_name: mssql_active_connections
+    type: gauge
+    help: "Number of active connections to each database in the SQL Server instance"
+    key_labels:
+      - database_name
+    values: [active_connections]
+    query: |
+      SELECT 
+        DB_NAME(sp.dbid) AS database_name, 
+        COUNT(sp.spid) AS active_connections
+      FROM sys.sysprocesses sp
+      WHERE DB_NAME(sp.dbid) IS NOT NULL
+      GROUP BY DB_NAME(sp.dbid)
+
+  # Prometheus metric for number of times the transaction log has been expanded, per database
+  - metric_name: mssql_log_growths
+    type: counter
+    help: "Number of times the transaction log has been expanded"
+    key_labels:
+      - db
+    values: [cntr_value]
+    query: |
+      SELECT rtrim(instance_name) AS db, cntr_value
+      FROM sys.dm_os_performance_counters WITH (NOLOCK)
+      WHERE counter_name = 'Log Growths' AND instance_name <> '_Total'
