@@ -68,11 +68,12 @@ To set up and run the application, follow these steps:
 <details hide>
 <summary>Show / Hide Section</summary>
 
-- [Prometheus Configuration](https://prometheus.io/docs/prometheus/latest/configuration/configuration/): Details on syntax and options when configuring Prometheus.
-- [Node Exporter Configuration](https://prometheus.io/docs/guides/node-exporter/): Details on syntax and options when configuring Node Exporter for Prometheus.
+- [Prometheus Configuration](https://prometheus.io/docs/prometheus/latest/configuration/configuration/): Syntax and options when configuring Prometheus.
+- [Node Exporter Configuration](https://prometheus.io/docs/guides/node-exporter/): Syntax and options when configuring Node Exporter for Prometheus.
 - [Telegraf General Inputs](https://github.com/influxdata/telegraf/tree/master/plugins/inputs): Configuration options and settings for input plugins, where each plugin represents a data source or collector that can be used to gather metrics.
 - [Telegraf Prometheus Outputs](https://github.com/influxdata/telegraf/tree/master/plugins/outputs/prometheus_client): Configuration settings for Prometheus outputs, used to modify metrics, tags and fields.
-- [MSSQL Exporter Documentation](https://github.com/awaragi/prometheus-mssql-exporter/tree/master): Documentation on use and configuration of Prometheus MSSQL Exporter for Docker container environments.
+- [SQL Exporter Documentation](https://github.com/burningalchemist/sql_exporter): Use and configuration of Burningalchemist SQL Exporter, for defining custom metrics.
+- [MSSQL Exporter Documentation](https://github.com/awaragi/prometheus-mssql-exporter/tree/master): Use and configuration of Prometheus MSSQL Exporter for Docker container environments.
 
 </details>
 
