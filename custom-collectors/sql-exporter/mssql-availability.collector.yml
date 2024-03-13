@@ -5,7 +5,7 @@ collector_name: mssql-availability
 metrics:
   # Prometheus metric to indicate whether any database exists
   # Static value parameter to set value if query does not return anything
-  - metric_name: mssql-database-exists
+  - metric_name: mssql_database_exists
     type: gauge
     help: "Indicates whether any database exists."
     static_value: 1
@@ -16,7 +16,7 @@ metrics:
       SELECT 0
 
   # Prometheus metric to indicate whether High Availability (e.g., Always On) is enabled
-  - metric_name: mssql-ha-enabled
+  - metric_name: mssql_ha_enabled
     type: gauge
     help: "Indicates whether High Availability (e.g., Always On) is enabled for each database."
     key_labels:
