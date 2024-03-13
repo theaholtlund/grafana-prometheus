@@ -39,7 +39,7 @@ To set up and run the application, follow these steps:
 6. The first Node Exporter container, `node_exporter_1`, has functionality for textfilt metrics. Enable a (hypothetical, as this is for testing as of now) continuous gathering of defined metrics by running the `update-metrics.sh` script inside the container:
 
    ```bash
-   docker exec -it node_exporter_1 /bin/sh -c "chmod +x ./update-metrics.sh"
+   docker exec -it node_exporter_1 /bin/sh -c "chmod +x ./custom-collectors/update-metrics.sh"
    ```
 
 </details>
