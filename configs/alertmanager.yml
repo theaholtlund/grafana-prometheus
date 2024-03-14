@@ -2,30 +2,30 @@
 
 # Top-level configuration, defines default routing for alerts unless overridden by specific routes
 route:
-  receiver: 'default-receiver'
+  receiver: "default-receiver"
   group_wait: 30s
   group_interval: 5m
   repeat_interval: 3h
-  group_by: ['alertname', 'job', 'instance', 'severity']
+  group_by: ["alertname", "job", "instance", "severity"]
 
   routes:
     # Define route for custom alerts to use the custom-alerts-receiver
-    - receiver: 'custom-alerts-receiver'
+    - receiver: "custom-alerts-receiver"
       match_re:
         alertname: high_windows_cpu_load_user_mode|high_cpu_load
 
 # Sender and receiver variables must be added to the file before execution
 # Prometheus currently does not support referencing environment variables
 receivers:
-  - name: 'default-receiver'
+  - name: "default-receiver"
     email_configs:
       - to: RECIPIENT_EMAIL
         from: SENDER_EMAIL
         smarthost: SMARTHOST
         auth_username: AUTH_USERNAME
         auth_password: AUTH_PASSWORD
-    
-  - name: 'custom-alerts-receiver'
+
+  - name: "custom-alerts-receiver"
     email_configs:
       - to: RECIPIENT_EMAIL
         from: SENDER_EMAIL
