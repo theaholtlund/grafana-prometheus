@@ -204,6 +204,21 @@ services:
       PASSWORD: ${SQL_PASSWORD}
       SERVER: ${SQL_SERVER_NUMBER}
 
+  pyrra:
+  image: pyrra/pyrra:latest
+  container_name: pyrra
+  ports:
+    - "8080:8080"
+  volumes:
+    - ./configs/pyrra.yml:/etc/pyrra/pyrra.yml
+  environment:
+    - PYRRA_METRICS_STORAGE=prometheus
+    - PYRRA_METRICS_STORAGE_PROMETHEUS_ADDRESS=http://prometheus:9090
+  networks:
+    - monitoring_network
+  depends_on:
+    - prometheus
+
 # Bridge is one of the built-in network drivers from Docker
 # Private internal networks isolated from the host network and other bridge networks
 networks:
