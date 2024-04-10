@@ -17,7 +17,11 @@ x-environment: &oncall-environment
   GRAFANA_API_URL: http://grafana:3000
   GRAFANA_CLOUD_ONCALL_API_URL: https://oncall-prod-eu-west-0.grafana.net/oncall
 
+# Bridge is one of the built-in network drivers from Docker
+# Private internal networks isolated from the host network and other bridge networks
 networks:
+  pyrra:
+    driver: bridge
   monitoring_network:
     driver: bridge
 
@@ -28,7 +32,6 @@ volumes:
   oncall_data:
   redis_data:
   prometheus_pyrra: {}
-  prometheus_pyrra_data:
 
 services:
   grafana:
@@ -119,8 +122,8 @@ services:
       - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./configs/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
       - prometheus_data:/prometheus
-      - prometheus_pyrra:/etc/prometheus/pyrra
-    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
+      - ./prometheus_pyrra:/etc/prometheus/pyrra
+    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention.time=33d --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
 
   alertmanager:
     image: prom/alertmanager
@@ -205,6 +208,7 @@ services:
       - ./custom-collectors/sql-exporter/sql-exporter.yml:/etc/custom-collectors/sql-exporter/sql-exporter.yml
       - ./custom-collectors/sql-exporter/mssql-availability.collector.yml:/etc/custom-collectors/sql-exporter/mssql-availability.collector.yml
     networks:
+      - pyrra
       - monitoring_network
     command: --config.file=/etc/custom-collectors/sql-exporter/sql-exporter.yml
 
@@ -222,6 +226,11 @@ services:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
     container_name: pyrra
     restart: always
+    networks:
+      - pyrra
+      - monitoring_network
+    ports:
+      - "9099:9099"
     command:
       [
         "api",
@@ -229,10 +238,6 @@ services:
         "--prometheus-external-url=http://localhost:9090",
         "--api-url=http://pyrra-filesystem:9444",
       ]
-    ports:
-      - "9099:9099"
-    networks:
-      - monitoring_network
 
   pyrra-filesystem:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
@@ -242,7 +247,8 @@ services:
       - filesystem
       - --prometheus-url=http://prometheus:9090
     networks:
+      - pyrra
       - monitoring_network
     volumes:
-      - ./configs/pyrra.yml:/etc/pyrra.yml
-      - prometheus_pyrra:/etc/prometheus/pyrra
+      - ./pyrra:/etc/pyrra
+      - ./prometheus_pyrra:/etc/prometheus/pyrra
