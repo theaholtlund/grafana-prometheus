@@ -17,6 +17,19 @@ x-environment: &oncall-environment
   GRAFANA_API_URL: http://grafana:3000
   GRAFANA_CLOUD_ONCALL_API_URL: https://oncall-prod-eu-west-0.grafana.net/oncall
 
+networks:
+  monitoring_network:
+    driver: bridge
+
+volumes:
+  grafana_data:
+  prometheus_data:
+  mssql_data:
+  oncall_data:
+  redis_data:
+  prometheus_pyrra: {}
+  prometheus_pyrra_data:
+
 services:
   grafana:
     image: grafana/grafana:latest
@@ -106,7 +119,7 @@ services:
       - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./configs/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
       - prometheus_data:/prometheus
-      - prometheus_pyrra_data:/etc/prometheus/pyrra
+      - prometheus_pyrra:/etc/prometheus/pyrra
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
 
   alertmanager:
@@ -207,6 +220,7 @@ services:
 
   pyrra-api:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
+    container_name: pyrra
     restart: always
     command:
       [
@@ -222,6 +236,7 @@ services:
 
   pyrra-filesystem:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
+    container_name: pyrra_files
     restart: always
     command:
       - filesystem
@@ -229,17 +244,5 @@ services:
     networks:
       - monitoring_network
     volumes:
-      - ./pyrra:/etc/pyrra
-      - prometheus_pyrra_data:/etc/pyrra
-
-networks:
-  monitoring_network:
-    driver: bridge
-
-volumes:
-  grafana_data:
-  prometheus_data:
-  mssql_data:
-  oncall_data:
-  redis_data:
-  prometheus_pyrra_data:
+      - ./configs/pyrra.yml:/etc/pyrra.yml
+      - prometheus_pyrra:/etc/prometheus/pyrra
