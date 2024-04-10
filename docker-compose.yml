@@ -20,8 +20,6 @@ x-environment: &oncall-environment
 # Bridge is one of the built-in network drivers from Docker
 # Private internal networks isolated from the host network and other bridge networks
 networks:
-  pyrra:
-    driver: bridge
   monitoring_network:
     driver: bridge
 
@@ -208,7 +206,6 @@ services:
       - ./custom-collectors/sql-exporter/sql-exporter.yml:/etc/custom-collectors/sql-exporter/sql-exporter.yml
       - ./custom-collectors/sql-exporter/mssql-availability.collector.yml:/etc/custom-collectors/sql-exporter/mssql-availability.collector.yml
     networks:
-      - pyrra
       - monitoring_network
     command: --config.file=/etc/custom-collectors/sql-exporter/sql-exporter.yml
 
@@ -227,7 +224,6 @@ services:
     container_name: pyrra
     restart: always
     networks:
-      - pyrra
       - monitoring_network
     ports:
       - "9099:9099"
@@ -250,7 +246,6 @@ services:
       - filesystem
       - --prometheus-url=http://prometheus:9090
     networks:
-      - pyrra
       - monitoring_network
     volumes:
       - ./pyrra:/etc/pyrra
