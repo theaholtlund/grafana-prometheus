@@ -106,6 +106,7 @@ services:
       - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
       - ./configs/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
       - prometheus_data:/prometheus
+      - prometheus_pyrra_data:/etc/prometheus/pyrra
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
 
   alertmanager:
@@ -208,14 +209,16 @@ services:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
     restart: always
     command:
-      - api
-      - --prometheus-url=http://prometheus:9090
-      - --prometheus-external-url=http://localhost:9090
-      - --api-url=http://pyrra-filesystem:9444
+      [
+        "api",
+        "--prometheus-url=http://prometheus:9090",
+        "--prometheus-external-url=http://localhost:9090",
+        "--api-url=http://pyrra-filesystem:9444",
+      ]
     ports:
       - "9099:9099"
     networks:
-      - pyrra
+      - monitoring_network
 
   pyrra-filesystem:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
@@ -224,10 +227,10 @@ services:
       - filesystem
       - --prometheus-url=http://prometheus:9090
     networks:
-      - pyrra
+      - monitoring_network
     volumes:
       - ./pyrra:/etc/pyrra
-      - ./prometheus_pyrra:/etc/prometheus/pyrra
+      - prometheus_pyrra_data:/etc/pyrra
 
 networks:
   monitoring_network:
@@ -239,4 +242,4 @@ volumes:
   mssql_data:
   oncall_data:
   redis_data:
-  pyrra_data:
+  prometheus_pyrra_data:
