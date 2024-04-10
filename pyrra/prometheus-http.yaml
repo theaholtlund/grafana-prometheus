@@ -1,0 +1,18 @@
+# Configuration file for Pyrra HTTP metrics
+
+apiVersion: pyrra.dev/v1alpha1
+kind: ServiceLevelObjective
+metadata:
+  name: prometheus-api-query
+  namespace: web
+  labels:
+    role: alert-rules
+spec:
+  target: "99.0"
+  window: 7d
+  indicator:
+    ratio:
+      errors:
+        metric: prometheus_http_requests_total{handler="/api/v1/query",code=~"5.."}
+      total:
+        metric: prometheus_http_requests_total{handler="/api/v1/query"}

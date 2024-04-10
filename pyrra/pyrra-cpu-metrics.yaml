@@ -1,0 +1,18 @@
+# Configuration file for Pyrra CPU metrics
+
+apiVersion: pyrra.dev/v1alpha1
+kind: ServiceLevelObjective
+metadata:
+  name: node-exporter-cpu-slo
+  namespace: hardware
+  labels:
+    role: alert-rules
+spec:
+  target: "99.9"
+  window: 7d
+  indicator:
+    ratio:
+      errors:
+        metric: 'grouped:node_cpu_seconds:avg_rate_5m{mode!="idle"}'
+      total:
+        metric: "grouped:node_cpu_seconds:avg_rate_5m"
