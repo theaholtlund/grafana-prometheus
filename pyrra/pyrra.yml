@@ -1,0 +1,36 @@
+# Configuration file for Pyrra SLOs
+
+version: "1"
+
+apiVersion: pyrra.dev/v1alpha1
+kind: ServiceLevelObjective
+metadata:
+  name: node-exporter-cpu-slo
+  namespace: monitoring
+spec:
+  target: "99.9"
+  window: 7d
+  indicator:
+    metric: grouped:node_cpu_seconds:avg_rate_5m
+
+---
+apiVersion: pyrra.dev/v1alpha1
+kind: ServiceLevelObjective
+metadata:
+  name: windows-exporter-cpu-slo
+spec:
+  target: "99.9"
+  window: 7d
+  indicator:
+    metric: windows_cpu_usage_percentage_user_mode
+
+---
+apiVersion: pyrra.dev/v1alpha1
+kind: ServiceLevelObjective
+metadata:
+  name: telegraf-cpu-slo
+spec:
+  target: "99.9"
+  window: 7d
+  indicator:
+    metric: telegraf_total_cpu_usage_percentage
