@@ -3,79 +3,79 @@
 groups:
   - name: node-exporter-cpu
     rules:
-    # Record grouped, average change in CPU seconds consumed over a 5-minute time window for Node Exporter metrics
-    # Calculates average rate of change for node_cpu_seconds_total metric, grouped by job, instance and mode labels    
-    - record: grouped:node_cpu_seconds:avg_rate_5m
-      expr: avg by (job, instance, mode) (rate(node_cpu_seconds_total[5m]))
+      # Record grouped, average change in CPU seconds consumed over a 5-minute time window for Node Exporter metrics
+      # Calculates average rate of change for node_cpu_seconds_total metric, grouped by job, instance and mode labels
+      - record: grouped:node_cpu_seconds:avg_rate_5m
+        expr: avg by (job, instance, mode) (rate(node_cpu_seconds_total[5m]))
 
   - name: windows-exporter-cpu
     rules:
-    # Record percentage of CPU usage in user mode through Windows Exporter metrics
-    # Analyses the rate of CPU time changes and total CPU time over a 5-minute time window
-    - record: windows_cpu_usage_percentage_user_mode
-      expr: 100 * sum(rate(windows_cpu_time_total{mode="user"}[5m])) / sum(rate(windows_cpu_time_total[5m]))
-  
-    # Custom alert for when Windows CPU usage exceeds 90 percent
-    - alert: high_windows_cpu_load_user_mode
-      expr: windows_cpu_usage_percentage_user_mode > 90
-      for: 5m
-      labels:
-        severity: warning
-      annotations:
-        summary: "High Windows CPU Load User Mode Alert"
-        description: "Windows CPU usage percentage in user mode has exceeded the threshold for 5 minutes."
+      # Record percentage of CPU usage in user mode through Windows Exporter metrics
+      # Analyses the rate of CPU time changes and total CPU time over a 5-minute time window
+      - record: windows_cpu_usage_percentage_user_mode
+        expr: 100 * sum(rate(windows_cpu_time_total{mode="user"}[5m])) / sum(rate(windows_cpu_time_total[5m]))
+
+      # Custom alert for when Windows CPU usage exceeds 90 percent
+      - alert: high_windows_cpu_load_user_mode
+        expr: windows_cpu_usage_percentage_user_mode > 90
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High Windows CPU Load User Mode Alert"
+          description: "Windows CPU usage percentage in user mode has exceeded the threshold for 5 minutes."
 
   - name: telegraf-cpu
     rules:
-    # Record total CPU usage percentage per host by subtracting average idle CPU usage for Telegraf metrics
-    # Will just include Telegraf metrics because of labeling convention for metric targets, other target have different names for labels
-    - record: telegraf_total_cpu_usage_percentage
-      expr: 100 - avg by (host) (cpu_usage_idle{cpu="cpu-total"})
+      # Record total CPU usage percentage per host by subtracting average idle CPU usage for Telegraf metrics
+      # Will just include Telegraf metrics because of labeling convention for metric targets, other target have different names for labels
+      - record: telegraf_total_cpu_usage_percentage
+        expr: 100 - avg by (host) (cpu_usage_idle{cpu="cpu-total"})
 
-    # Record the average CPU usage percentage per CPU core based on Telegraf metrics
-    - record: avg_cpu_usage_by_cpu
-      expr: avg by (cpu) (100 - cpu_usage_idle)
-    
-    # Custom alert for when Telegraf total percentage CPU usage exceeds threshold
-    - alert: high_cpu_load
-      expr: telegraf_total_cpu_usage_percentage > 1.2
-      for: 10m
-      labels:
-        severity: warning
-      annotations:
-        summary: "High CPU Load Alert"
-        description: "Total CPU usage percentage has exceeded the threshold for 10 seconds."
-  
+      # Record the average CPU usage percentage per CPU core based on Telegraf metrics
+      - record: avg_cpu_usage_by_cpu
+        expr: avg by (cpu) (100 - cpu_usage_idle)
+
+      # Custom alert for when Telegraf total percentage CPU usage exceeds threshold
+      - alert: high_cpu_load
+        expr: telegraf_total_cpu_usage_percentage > 1.2
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU Load Alert"
+          description: "Total CPU usage percentage has exceeded the threshold for 10 seconds."
+
   - name: node-exporter-and-telegraf-cpu
     rules:
-    # Record combined CPU usage percentage through Node Exporter and Telegraf metrics
-    # Subtracts average idle CPU time in the last hour from 100%, then adds half the average process CPU time to get combined CPU usage percentage
-    # The irate function is used for calculating the per-second rate of change of a time series metric
-    - record: combined_cpu_usage_percentage
-      expr: (100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[1h])) * 100) + (avg(process_cpu_seconds_total) / 2))
-    
-    # Custom alert for when the combined percentage CPU usage of Node Exporter and Telegraf exceeds threshold
-    - alert: high_cpu_load
-      expr: combined_cpu_usage_percentage > 80
-      for: 2m
-      labels:
-        severity: critical
-      annotations:
-        summary: "High Combined CPU Load Alert"
-        description: "Total combined CPU usage percentage of Node Exporter and Telegraf has exceeded the threshold for 2 minutes."
+      # Record combined CPU usage percentage through Node Exporter and Telegraf metrics
+      # Subtracts average idle CPU time in the last hour from 100%, then adds half the average process CPU time to get combined CPU usage percentage
+      # The irate function is used for calculating the per-second rate of change of a time series metric
+      - record: combined_cpu_usage_percentage
+        expr: (100 - (avg(irate(node_cpu_seconds_total{mode="idle"}[1h])) * 100) + (avg(process_cpu_seconds_total) / 2))
+
+      # Custom alert for when the combined percentage CPU usage of Node Exporter and Telegraf exceeds threshold
+      - alert: high_cpu_load
+        expr: combined_cpu_usage_percentage > 80
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "High Combined CPU Load Alert"
+          description: "Total combined CPU usage percentage of Node Exporter and Telegraf has exceeded the threshold for 2 minutes."
 
   - name: mssql-exporter
     rules:
-    # Define metrics from MSSQL Exporter for later use in alert by creating recording rule
-    - record: mssql_database_state
-      expr: mssql_database_state
+      # Define metrics from MSSQL Exporter for later use in alert by creating recording rule
+      - record: mssql_database_state
+        expr: mssql_database_state
 
-    # Alert for instances where any MSSQL Exporter database has emergency state for a duration longer than the set threshold
-    - alert: database_states_in_emergency
-      expr: mssql_database_state == 5 > 0
-      for: 2m
-      labels:
-        severity: critical
-      annotations:
-        summary: "Emergency Database States Alert"
-        description: "One or more databases have been in 'emergency' state for more than 2 minutes."
+      # Alert for instances where any MSSQL Exporter database has emergency state for a duration longer than the set threshold
+      - alert: database_states_in_emergency
+        expr: mssql_database_state == 5 > 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Emergency Database States Alert"
+          description: "One or more databases have been in 'emergency' state for more than 2 minutes."
