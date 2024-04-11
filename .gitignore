@@ -1,3 +1,4 @@
 .env
+.DS_Store
 configs/nginx.conf
 prometheus_pyrra
