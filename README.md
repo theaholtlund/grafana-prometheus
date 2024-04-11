@@ -82,7 +82,13 @@ To set up and run the application, follow these steps:
 <details hide>
 <summary>Show / Hide Section</summary>
 
-Pyrra enhances alerting capabilities by providing advanced rules and reports functionality, while SLOs help in defining and tracking service level objectives. Pyrra works by extending Prometheus and Alertmanager functionalities, allowing users to define complex alerting rules and track SLO metrics efficiently.
+### SLOs
+
+SLOs, quantify services and reliability targets, allowing users to make data-driven decisions in regards to the service. This is accomplished through error budgets, which can be defined as the inverse of the objective. As such, 100% - Objective = Error Budget.
+
+### Pyrra
+
+Pyrra enhances alerting capabilities by providing advanced rules and reports functionality. Pyrra works by extending Prometheus and Alertmanager functionalities, allowing users to define complex alerting rules and track SLO metrics. Creating Pyrra SLOs is done through CRDs, defining name, namespace, labels and so on for the SLO.
 
 </details>
 
