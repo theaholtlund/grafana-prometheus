@@ -3,12 +3,12 @@
 apiVersion: pyrra.dev/v1alpha1
 kind: ServiceLevelObjective
 metadata:
-  name: node-exporter-cpu-slo
+  name: node-exporter-cpu
   namespace: hardware
   labels:
     role: alert-rules
 spec:
-  target: "99.9"
+  target: "90"
   window: 7d
   indicator:
     ratio:
