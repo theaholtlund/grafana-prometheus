@@ -77,6 +77,15 @@ To set up and run the application, follow these steps:
 
 </details>
 
+## Pyrra: Working with SLOs
+
+<details hide>
+<summary>Show / Hide Section</summary>
+
+Pyrra enhances alerting capabilities by providing advanced rules and reports functionality, while SLOs help in defining and tracking service level objectives. Pyrra works by extending Prometheus and Alertmanager functionalities, allowing users to define complex alerting rules and track SLO metrics efficiently.
+
+</details>
+
 ## Additional Learning and Documentation
 
 <details hide>
