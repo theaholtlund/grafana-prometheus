@@ -1,3 +1,4 @@
+# Define environment variables and settings for Grafana On-Call
 version: "3.9"
 
 x-environment: &oncall-environment
@@ -17,12 +18,13 @@ x-environment: &oncall-environment
   GRAFANA_API_URL: http://grafana:3000
   GRAFANA_CLOUD_ONCALL_API_URL: https://oncall-prod-eu-west-0.grafana.net/oncall
 
-# Bridge is one of the built-in network drivers from Docker
-# Private internal networks isolated from the host network and other bridge networks
+# Bridge is a default network driver that isolates containers within the same host
+# Network is a general term for various types of network configurations used for container communication
 networks:
   monitoring_network:
     driver: bridge
 
+# Defines volumes to persist data for various services
 volumes:
   grafana_data:
   prometheus_data:
@@ -31,7 +33,9 @@ volumes:
   redis_data:
   prometheus_pyrra: {}
 
+# Defines services that make up the monitoring stack
 services:
+  # Add configuration for Grafana service
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -47,6 +51,7 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
 
+  # Add configuration for Engine service
   engine:
     image: grafana/oncall
     container_name: engine
@@ -64,6 +69,7 @@ services:
       redis:
         condition: service_healthy
 
+  # Add configuration for Celery service
   celery:
     image: grafana/oncall
     container_name: celery
@@ -78,6 +84,7 @@ services:
       redis:
         condition: service_healthy
 
+  # Add configuration for Redis service
   redis:
     image: redis:7.0.5
     container_name: redis
@@ -99,6 +106,7 @@ services:
       interval: 5s
       retries: 10
 
+  # Add configuration for NGINX service
   nginx:
     image: nginx:latest
     container_name: nginx
@@ -109,6 +117,7 @@ services:
     networks:
       - monitoring_network
 
+  # Add configuration for Prometheus service
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -123,6 +132,7 @@ services:
       - ./prometheus_pyrra:/etc/prometheus/pyrra
     command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention.time=33d --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
 
+  # Add configuration for Alertmanager service
   alertmanager:
     image: prom/alertmanager
     container_name: alertmanager
@@ -134,6 +144,7 @@ services:
       - ./configs/alertmanager.yml:/etc/alertmanager/alertmanager.yml
     command: --config.file=/etc/alertmanager/alertmanager.yml
 
+  # Add configuration for Telegraf service
   telegraf:
     image: telegraf:latest
     container_name: telegraf
@@ -144,6 +155,7 @@ services:
     networks:
       - monitoring_network
 
+  # Add configuration for Node Exporter #1 service
   node_exporter_1:
     image: prom/node-exporter
     container_name: node_exporter_1
@@ -160,6 +172,7 @@ services:
         "--collector.textfile.directory=textfile-metrics",
       ]
 
+  # Add configuration for Node Exporter #2 service
   node_exporter_2:
     image: prom/node-exporter
     container_name: node_exporter_2
@@ -169,6 +182,7 @@ services:
       - monitoring_network
     command: ["--web.listen-address=:9100"]
 
+  # Add configuration for Node Exporter #3 service
   node_exporter_3:
     image: prom/node-exporter
     container_name: node_exporter_3
@@ -178,6 +192,7 @@ services:
       - monitoring_network
     command: ["--web.listen-address=:9100"]
 
+  # Add configuration for MSSQL service
   mssql_server:
     image: mcr.microsoft.com/mssql/server
     container_name: sql_2019
@@ -193,6 +208,7 @@ services:
       - mssql_data:/var/opt/mssql
       - ./sql-scripts:/scripts
 
+  # Add configuration for SQL Exporter service
   sql_exporter:
     image: burningalchemist/sql_exporter
     container_name: sql_exporter
@@ -209,6 +225,7 @@ services:
       - monitoring_network
     command: --config.file=/etc/custom-collectors/sql-exporter/sql-exporter.yml
 
+  # Add configuration for MSSQL Exporter service
   mssql_exporter:
     image: awaragi/prometheus-mssql-exporter
     container_name: mssql_exporter
@@ -219,6 +236,7 @@ services:
       PASSWORD: ${SQL_PASSWORD}
       SERVER: ${SQL_SERVER_NUMBER}
 
+  # Add configuration for Pyrra service
   pyrra-api:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
     container_name: pyrra
@@ -235,9 +253,10 @@ services:
         "--api-url=http://pyrra-filesystem:9444",
       ]
     volumes:
-      - ./config/prometheus.yaml:/etc/prometheus/prometheus.yml:ro
+      - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yml
       - ./prometheus_pyrra:/etc/prometheus/pyrra
 
+  # Add configuration for Pyrra Filesystem service
   pyrra-filesystem:
     image: ghcr.io/pyrra-dev/pyrra:v0.7.0
     container_name: pyrra_files
