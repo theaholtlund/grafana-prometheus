@@ -8,6 +8,7 @@ metadata:
   labels:
     role: alert-rules
 spec:
+  description: "Measure CPU utilisation to ensure performance stability"
   target: "90"
   window: 7d
   indicator:
