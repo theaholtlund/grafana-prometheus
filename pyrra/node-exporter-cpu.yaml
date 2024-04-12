@@ -1,4 +1,4 @@
-# Configuration file for Pyrra CPU metrics
+# Measure CPU utilisation using Node Exporter metrics
 
 apiVersion: pyrra.dev/v1alpha1
 kind: ServiceLevelObjective
