@@ -1,0 +1,19 @@
+# Measures total CPU usage percentage using Telegraf metrics
+
+apiVersion: pyrra.dev/v1alpha1
+kind: ServiceLevelObjective
+metadata:
+  name: telegraf-cpu
+  namespace: hardware
+  labels:
+    role: alert-rules
+spec:
+  description: "Monitor total CPU usage percentage using Telegraf metrics"
+  target: "98"
+  window: 10s
+  indicator:
+    ratio:
+      errors:
+        metric: "telegraf_total_cpu_usage_percentage"
+      total:
+        metric: "telegraf_total_cpu_usage_percentage"
