@@ -10,7 +10,7 @@ metadata:
 spec:
   description: "Monitor total CPU usage percentage using Telegraf metrics"
   target: "98"
-  window: 10s
+  window: 7d
   indicator:
     ratio:
       errors:
