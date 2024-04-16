@@ -25,9 +25,9 @@ To set up and run the application, follow these steps:
 
 2. Navigate to the project directory.
 
-3. Add environment variables referenced in the `docker-compose.yml` file to a project `.env` file. However, it is important to note that SMTP credentials used by Alertmanager, such as usernames and passwords, must be added directly to the `alertmanager.yml` file in the `configs` folder. This is because Prometheus currently does not support the use of environment variables or config substitution.
+3. Add environment variables referenced in the `docker-compose.yaml` file to a project `.env` file. However, it is important to note that SMTP credentials used by Alertmanager, such as usernames and passwords, must be added directly to the `alertmanager.yaml` file in the `configs` folder. This is because Prometheus currently does not support the use of environment variables or config substitution.
 
-4. Add an `nginx.conf` file to the `configs` folder, if you want to use proxying. The `docker-compose.yml` file will create an Nginx container, but configs must be added manually as the Nginx config does not support environment variables out of the box.
+4. Add an `nginx.conf` file to the `configs` folder, if you want to use proxying. The `docker-compose.yaml` file will create an Nginx container, but configs must be added manually as the Nginx config does not support environment variables out of the box.
 
 5. Start the stack using Docker Compose:
 
@@ -59,7 +59,7 @@ To set up and run the application, follow these steps:
 - **Node Exporter**: Specialised exporter focused Unix-based systems, and part of the Prometheus ecosystem. In this project, it is used to gather system-level metrics from containers running on the OS, which in this case is macOS.
 - **MSSQL Server**: Create a containerised Microsoft SQL Server environment on Linux for Docker Engine. It is here used to create an instance of the MSSQL Server program, a relational database management system, later used for creating testing databases.
 - **MSSQL Exporter**: Exporter used to collect metrics from a Microsoft SQL Server instance, enabling monitoring of SQL Server-specific performance metrics and database health.
-- **Windows Exporter**: Specialised exporter for Windows-based systems, and only configured in the `prometheus.yml` file for this project, as it is hosted from a macOS and therefore scrapes metrics from a Windows VM where it is running.
+- **Windows Exporter**: Specialised exporter for Windows-based systems, and only configured in the `prometheus.yaml` file for this project, as it is hosted from a macOS and therefore scrapes metrics from a Windows VM where it is running.
 
 </details>
 
