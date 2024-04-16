@@ -7,7 +7,7 @@ global:
 
 # Load rules and periodically evaluate them according to global evaluation interval
 rule_files:
-  - "prometheus.rules.yml"
+  - "prometheus.rules.yaml"
   - "pyrra/*.yaml"
 
 # When each container is running in its own separate network namespace, use IP address

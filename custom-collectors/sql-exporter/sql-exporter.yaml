@@ -23,4 +23,4 @@ target:
 
 # Collector definition files
 collector_files:
-  - "*.collector.yml"
+  - "*.collector.yaml"

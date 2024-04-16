@@ -64,7 +64,7 @@ services:
       - monitoring_network
     volumes:
       - oncall_data:/var/lib/oncall
-      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yaml
     depends_on:
       redis:
         condition: service_healthy
@@ -126,11 +126,11 @@ services:
     networks:
       - monitoring_network
     volumes:
-      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./configs/prometheus.rules.yml:/etc/prometheus/prometheus.rules.yml
+      - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yaml
+      - ./configs/prometheus.rules.yaml:/etc/prometheus/prometheus.rules.yaml
       - prometheus_data:/prometheus
       - ./prometheus_pyrra:/etc/prometheus/pyrra
-    command: --config.file=/etc/prometheus/prometheus.yml --storage.tsdb.path=/prometheus --storage.tsdb.retention.time=33d --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
+    command: --config.file=/etc/prometheus/prometheus.yaml --storage.tsdb.path=/prometheus --storage.tsdb.retention.time=33d --web.console.templates=/etc/prometheus/consoles --web.console.libraries=/etc/prometheus/console_libraries
 
   # Add configuration for Alertmanager service
   alertmanager:
@@ -141,8 +141,8 @@ services:
     networks:
       - monitoring_network
     volumes:
-      - ./configs/alertmanager.yml:/etc/alertmanager/alertmanager.yml
-    command: --config.file=/etc/alertmanager/alertmanager.yml
+      - ./configs/alertmanager.yaml:/etc/alertmanager/alertmanager.yaml
+    command: --config.file=/etc/alertmanager/alertmanager.yaml
 
   # Add configuration for Telegraf service
   telegraf:
@@ -219,11 +219,11 @@ services:
       MSSQL_SA_USER: ${SA_USER}
       MSSQL_SA_PASSWORD: ${SA_PASSWORD}
     volumes:
-      - ./custom-collectors/sql-exporter/sql-exporter.yml:/etc/custom-collectors/sql-exporter/sql-exporter.yml
-      - ./custom-collectors/sql-exporter/mssql-availability.collector.yml:/etc/custom-collectors/sql-exporter/mssql-availability.collector.yml
+      - ./custom-collectors/sql-exporter/sql-exporter.yaml:/etc/custom-collectors/sql-exporter/sql-exporter.yaml
+      - ./custom-collectors/sql-exporter/mssql-availability.collector.yaml:/etc/custom-collectors/sql-exporter/mssql-availability.collector.yaml
     networks:
       - monitoring_network
-    command: --config.file=/etc/custom-collectors/sql-exporter/sql-exporter.yml
+    command: --config.file=/etc/custom-collectors/sql-exporter/sql-exporter.yaml
 
   # Add configuration for MSSQL Exporter service
   mssql_exporter:
@@ -253,7 +253,7 @@ services:
         "--api-url=http://pyrra-filesystem:9444",
       ]
     volumes:
-      - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yml
+      - ./configs/prometheus.yaml:/etc/prometheus/prometheus.yaml
       - ./prometheus_pyrra:/etc/prometheus/pyrra
 
   # Add configuration for Pyrra Filesystem service
